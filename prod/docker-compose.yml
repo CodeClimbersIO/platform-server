@@ -1,9 +1,16 @@
 version: '3.8'
 
 services:
+  web:
+    build: ../
+    container_name: web
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
   redis:
     image: redis:latest
-    container_name: codeclimbers_redis
+    container_name: redis
     ports:
       - "6379:6379"
     volumes:
