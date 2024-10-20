@@ -45,4 +45,6 @@ app.post("/weekly-report", async (req: Request, res: Response) => {
   }
 });
 
-app.listen(8000);
+const PORT = Deno.env.get("PORT");
+
+app.listen(PORT || 8000);
