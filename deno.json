@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --allow-all main.ts",
+    "start": "deno run --watch main.ts"
+  },
+  "imports": {
+    "axios": "npm:axios@^1.7.7",
+    "express": "npm:express@^5.0.1",
+    "redis": "npm:redis@^4.7.0"
+  },
+  "compilerOptions": {
+    "types": ["./types.d.ts"]
+  }
+}

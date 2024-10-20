@@ -1,0 +1,8 @@
+# mac files
+.DS_Store
+
+#vscode
+.vscode/*
+
+#dotenv
+.env*
