@@ -1,4 +1,14 @@
 {
+  "author": {
+    "name": "Paul Hovley",
+    "email": "rphovley@gmail.com"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  ],
   "tasks": {
     "dev": "deno run --watch --allow-all main.ts",
     "start": "deno run --watch main.ts"
