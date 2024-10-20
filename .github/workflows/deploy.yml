@@ -27,7 +27,7 @@ jobs:
           USER: ${{ secrets.SERVER_USER }}
         run: |
           ssh $USER@$HOST << EOF
-            cd ~/projects/codeclimbers/platform-codeclimbers/prod
+            cd ~/projects/codeclimbers/platform-server/prod
             docker-compose pull codeclimbers-platform-server
             docker-compose up -d --no-deps codeclimbers-platform-server
             docker image prune -f
