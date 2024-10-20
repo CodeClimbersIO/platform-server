@@ -1,4 +1,4 @@
-# CodeClimbers Email Service
+# CodeClimbers Platform Service
 
 This project provides a service for performing online required activities to CodeClimbers users.
 

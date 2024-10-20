@@ -2,7 +2,7 @@ name: Docker Image CI/CD
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "deploy"]
 
 jobs:
   build-and-push:
@@ -39,11 +39,17 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Prepare Docker tags
+        id: prep
+        run: |
+          DOCKER_IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          TAGS="${DOCKER_IMAGE}:latest,${DOCKER_IMAGE}:${VERSION}"
+          echo "TAGS=${TAGS}" >> $GITHUB_OUTPUT
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ steps.prep.outputs.TAGS }}
