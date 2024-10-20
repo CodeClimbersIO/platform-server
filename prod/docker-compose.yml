@@ -1,11 +1,11 @@
 services:
   codeclimbers-platform-server:
-    build: ../
+    image: ghcr.io/codeclimbersio/platform-server
     container_name: codeclimbers-platform-server
     ports:
       - "8000:8000"
     depends_on:
-      - redis
+      - codeclimbers-redis
     env_file:
       - .env
   codeclimbers-redis:
