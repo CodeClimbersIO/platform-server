@@ -8,6 +8,8 @@ services:
       - codeclimbers-redis
     env_file:
       - .env
+    restart: always
+    
   codeclimbers-redis:
     image: redis:latest
     container_name: codeclimbers-redis
