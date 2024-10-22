@@ -51,8 +51,12 @@ export async function sendWeeklyReportEmail(email: string, data: Codeclimbers.We
   
   // Assuming you have a transactional email template set up in Loops for the weekly report
   const WEEKLY_REPORT_TEMPLATE_ID = "cm2eyuffe01nuu442jxc5vqcv";
+  
+  console.log("Sending weekly report email to", email);
+  console.log("Weekly report data", data);
+
   const weeklyReportDto: Codeclimbers.WeeklyReportEmailDto = {
-    totalScore: Math.round(data.totalScore.actual / 60),
+    totalScore: data.totalScore.actual,
     deepWorkAvgHours: Math.round(data.deepWorkTimeScore.actual / 60),
     totalCodingHours: Math.round(data.projectTimeScore.actual / 60),
     totalGrowthHours: Math.round(data.growthScore.actual / 60),

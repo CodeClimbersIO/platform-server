@@ -27,7 +27,8 @@ app.post("/weekly-report", async (req: Request, res: Response) => {
 
   try {
     const emailSent = await redisClient.get(key);
-
+    console.log("Weekly report", weeklyReport);
+    console.log("Email sent", emailSent);
     if (emailSent) {
       return res.status(429).json({ error: "Weekly report already sent for this user" });
     }
