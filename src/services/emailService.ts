@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "npm:axios";
 import "jsr:@std/dotenv/load";
+import { assert } from "jsr:@std/assert@1/assert";
 
 
 
@@ -13,6 +14,8 @@ const LOOPS_API_URL = "https://app.loops.so/api/v1/transactional";
  * @param data Dynamic data to be used in the email template
  */
 export async function sendEmail<T>(to: string, transactionalId: string, data: T): Promise<void> {
+  assert(LOOPS_API_KEY, "LOOPS_API_KEY is not set");
+  
   try {
     const response = await axios.post(
       LOOPS_API_URL,

@@ -1,3 +1,4 @@
+import { assert } from "jsr:@std/assert@1/assert";
 import Anthropic from 'npm:@anthropic-ai/sdk';
 
 const anthropicClient = new Anthropic({
@@ -10,6 +11,8 @@ const anthropicClient = new Anthropic({
  * Uses Claude 3.5 Sonnet
  */
 export async function generatePerformanceReview(weeklyReport: Codeclimbers.WeeklyReportData): Promise<string> {
+  assert(anthropicClient.apiKey, "ANTHROPIC_API_KEY is not set");
+  
   const prompt = buildPromptFromWeeklyScores(weeklyReport);
 
   const message = await anthropicClient.messages.create({
