@@ -14,9 +14,12 @@
     "start": "deno run --watch main.ts"
   },
   "imports": {
+    "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@^0.30.1",
+    "@oak/oak": "jsr:@oak/oak@^17.1.1",
     "axios": "npm:axios@^1.7.7",
     "express": "npm:express@^5.0.1",
-    "redis": "npm:redis@^4.7.0"
+    "redis": "npm:redis@^4.7.0",
+    "@denoland/cors": "https://deno.land/x/cors@v1.2.2/mod.ts"
   },
   "compilerOptions": {
     "types": ["./types.d.ts"]
