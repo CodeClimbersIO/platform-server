@@ -25,6 +25,7 @@ router.post("/weekly-report", async (ctx) => {
     if (emailSent) {
       ctx.response.status = 429;
       ctx.response.body = { error: "Weekly report already sent for this user" };
+      return;
     }
 
     // Send email (implement this function in emailService.ts)
