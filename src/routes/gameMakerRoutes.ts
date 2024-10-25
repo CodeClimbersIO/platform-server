@@ -7,11 +7,18 @@
 import { redisClient } from "../redis.ts";
 import { Router, type RouterContext } from "@oak/oak/router";
 import { gameMakerApiKeyMiddleware } from "../middleware/auth.ts";
+import type { Context } from "@oak/oak/context";
+import { generatePerformanceReview } from "../services/bigBrotherService.ts";
 
 export const getGameSettings = async (game: string) => {
   const key = `game-settings:${game}`;
   const settings = await redisClient.get(key);
-  return settings;
+  
+  if(!settings) {
+    throw new Error(`Game settings not found for ${game}`);
+  }
+
+  return JSON.parse(settings);
 };
 
 export const setGameSettings = async (game: string, settings: string) => {
@@ -19,21 +26,56 @@ export const setGameSettings = async (game: string, settings: string) => {
   await redisClient.set(key, settings);
 };
 
+export const getAiReports = async () => {
+  const key = `game-maker-weekly-reports`;
+  const reportsString = await redisClient.get(key);
+  return reportsString ? JSON.parse(reportsString) : [];
+};
+
+export const setAiReports = async (newReport: { email: string, startOfWeek: string, performanceReview: string }) => {
+  const key = `game-maker-weekly-reports`;
+  const reportsString = await redisClient.get(key);
+  let reports = []
+  if(reportsString) {
+    reports = JSON.parse(reportsString);
+  }
+  reports.push(newReport);
+  await redisClient.set(key, JSON.stringify(reports));
+}
+
+
 
 const router = new Router();
 
-router.get("/game-settings/:game", gameMakerApiKeyMiddleware, async (ctx: RouterContext<"/game-settings/:game">) => {
+router.get("/game-maker/settings/:game", gameMakerApiKeyMiddleware, async (ctx: RouterContext<"/game-maker/settings/:game">) => {
   const game = ctx.params.game;
   const settings = await getGameSettings(game);
   ctx.response.body ={data: settings};
   // ctx.response.body = { message: "Game settings retrieved" };
 });
 
-router.post("/game-settings/:game", gameMakerApiKeyMiddleware, async (ctx: RouterContext<"/game-settings/:game">) => {
+router.post("/game-maker/settings/:game", gameMakerApiKeyMiddleware, async (ctx: RouterContext<"/game-maker/settings/:game">) => {
   const game = ctx.params.game;
   const settings = await ctx.request.body.json();
   await setGameSettings(game, JSON.stringify(settings));
   ctx.response.body = { message: "Game settings updated" };
+});
+
+// runs the weekly report and saves it to a list in redis (key: game-maker-weekly-reports)
+router.post("/game-maker/ai-weekly-reports", gameMakerApiKeyMiddleware, async (ctx: Context) => {
+  const { email, startOfWeek, weeklyReport } = await ctx.request.body.json();
+
+  const performanceReview = await generatePerformanceReview(weeklyReport);
+
+  await setAiReports({ email, startOfWeek, performanceReview });
+
+  ctx.response.body = { message: "Weekly report saved" };
+});
+
+//endpoint returns the list of weekly reports
+router.get("/game-maker/ai-weekly-reports", gameMakerApiKeyMiddleware, async (ctx: Context) => {
+  const reports = await getAiReports();
+  ctx.response.body = { data: reports };
 });
 
 export const gameMakerRouter = router;
