@@ -13,7 +13,7 @@ import { isDevelopment } from "./environment.ts";
 const app = new Application();
 
 app.use(oakCors({
-  origin: isDevelopment ? "*" : "https://codeclimbers.com"
+  origin: isDevelopment ? "*" : "https://local.codeclimbers.com"
 }));
 
 app.use(async (ctx, next) => {
