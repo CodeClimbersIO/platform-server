@@ -6,7 +6,7 @@ import { oakCors } from "@denoland/cors";
 import { assert } from "jsr:@std/assert@1/assert";
 import { gameMakerRouter } from "./routes/gameMakerRoutes.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
-import { weeklyReportRouter } from "./routes/weeklyReportRoutes.ts";
+import { deprecratedWeeklyReportRouter, weeklyReportRouter } from "./routes/weeklyReportRoutes.ts";
 import { isDevelopment } from "./environment.ts";
 
 
@@ -29,7 +29,11 @@ router.get('/health', (ctx) => {
 
 app.use(router.routes());
 app.use(weeklyReportRouter.routes());
-app.use(gameMakerRouter.routes());
+
+app.use(router.routes());
+app.use(deprecratedWeeklyReportRouter.routes());
+app.use(weeklyReportRouter.prefix('/api').routes());
+app.use(gameMakerRouter.prefix('/api').routes());
 app.use(router.allowedMethods());
 
 app.use(errorHandler);
