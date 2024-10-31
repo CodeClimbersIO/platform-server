@@ -1,6 +1,5 @@
-import type { Context } from '@oak/oak/context'
 import { assert } from 'jsr:@std/assert@1/assert'
-
+import type { Context } from 'koa'
 const GAME_MAKER_API_KEY = Deno.env.get('GAME_MAKER_API_KEY')
 // middleware to check for api key in header
 export const gameMakerApiKeyMiddleware = async (

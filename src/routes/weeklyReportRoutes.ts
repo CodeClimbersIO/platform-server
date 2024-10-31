@@ -1,18 +1,18 @@
 import { redisClient } from '../redis.ts'
-import { Router } from '@oak/oak/router'
+import Router from '@koa/router'
+import type { Context } from 'koa'
 import { generatePerformanceReview } from '../services/bigBrotherService.ts'
 import {
   sendAIWeeklyReportEmail,
   sendWeeklyReportEmail,
 } from '../services/emailService.ts'
-import type { Context } from '@oak/oak/context'
 import { validateStartOfWeek } from '../validators/date.validator.ts'
 
 const deprecratedRouter = new Router()
 const router = new Router()
 
 const weeklyReportHandler = async (ctx: Context) => {
-  const { email, startOfWeek, weeklyReport } = await ctx.request.body.json()
+  const { email, startOfWeek, weeklyReport } = await ctx.request.body
 
   if (!email || !startOfWeek || !weeklyReport) {
     ctx.response.status = 400
@@ -63,8 +63,8 @@ deprecratedRouter.post('/weekly-report', weeklyReportHandler)
  * Each user receives just one per week. Records the performance review in a redis db
  * where the key is the email and start date for the week of the email
  */
-router.post('/ai-weekly-report', async (ctx) => {
-  const { email, startOfWeek, weeklyReport } = await ctx.request.body.json()
+router.post('/ai-weekly-report', async (ctx: Context) => {
+  const { email, startOfWeek, weeklyReport } = await ctx.request.body
 
   if (!email || !startOfWeek || !weeklyReport) {
     ctx.response.status = 400
@@ -108,7 +108,7 @@ router.post('/ai-weekly-report', async (ctx) => {
 /**
  * Endpoint that retrieves the performance review for a user using their email and start date of the week
  */
-router.get('/ai-weekly-report', async (ctx) => {
+router.get('/ai-weekly-report', async (ctx: Context) => {
   const email = ctx.request.url.searchParams.get('email')
   const startOfWeek = ctx.request.url.searchParams.get('startOfWeek')
   if (!email || !startOfWeek) {

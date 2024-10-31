@@ -1,31 +1,34 @@
 import 'jsr:@std/dotenv/load'
 
-import { Application } from 'jsr:@oak/oak/application'
-import { Router } from 'jsr:@oak/oak/router'
-import { oakCors } from '@denoland/cors'
 import { assert } from 'jsr:@std/assert@1/assert'
 import { gameMakerRouter } from './routes/gameMakerRoutes.ts'
 import { errorHandler } from './middleware/errorHandler.ts'
+import Koa from 'koa'
+import Router from '@koa/router'
+import cors from '@koa/cors'
+import bodyParser from 'koa-bodyparser'
+import type { Context } from 'koa'
 import {
   deprecratedWeeklyReportRouter,
   weeklyReportRouter,
 } from './routes/weeklyReportRoutes.ts'
 import { isDevelopment } from './environment.ts'
 
-const app = new Application()
+const app = new Koa()
 
-app.use(oakCors({
+app.use(bodyParser())
+app.use(cors({
   origin: isDevelopment ? '*' : 'https://local.codeclimbers.io',
 }))
 
-app.use(async (ctx, next) => {
+app.use(async (ctx: Context, next: () => Promise<unknown>) => {
   ctx.response.type = 'application/json'
   await next()
 })
 
 const router = new Router()
 
-router.get('/health', (ctx) => {
+router.get('/health', (ctx: Context) => {
   ctx.response.body = { ok: true }
 })
 

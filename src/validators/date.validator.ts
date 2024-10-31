@@ -5,7 +5,6 @@ export const validateStartOfWeek = (
 ): { status: number; body: { error: string } } | undefined => {
   // validate startOfWeek is a valid date
   const date = dayjs(startOfWeek)
-  console.log(date)
   if (!date.isValid()) {
     return { status: 400, body: { error: 'startOfWeek is not a valid date' } }
   }
@@ -29,7 +28,6 @@ export const validateStartOfWeek = (
   }
 
   // Check if date is a Monday (0 = Sunday, 1 = Monday, etc.)
-  console.log(date.day())
   if (date.day() !== 1) {
     return { status: 400, body: { error: 'startOfWeek must be a Monday' } }
   }

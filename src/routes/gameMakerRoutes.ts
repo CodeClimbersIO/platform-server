@@ -5,9 +5,9 @@
  */
 
 import { redisClient } from '../redis.ts'
-import { Router, type RouterContext } from '@oak/oak/router'
 import { gameMakerApiKeyMiddleware } from '../middleware/auth.ts'
-import type { Context } from '@oak/oak/context'
+import Router from '@koa/router'
+import type { Context } from 'koa'
 import { generatePerformanceReview } from '../services/bigBrotherService.ts'
 
 export const getGameSettings = async (game: string) => {
@@ -50,7 +50,7 @@ const router = new Router()
 router.get(
   '/game-maker/settings/:game',
   gameMakerApiKeyMiddleware,
-  async (ctx: RouterContext<'/game-maker/settings/:game'>) => {
+  async (ctx: Context) => {
     const game = ctx.params.game
     const settings = await getGameSettings(game)
     ctx.response.body = { data: settings }
@@ -61,9 +61,9 @@ router.get(
 router.post(
   '/game-maker/settings/:game',
   gameMakerApiKeyMiddleware,
-  async (ctx: RouterContext<'/game-maker/settings/:game'>) => {
+  async (ctx: Context) => {
     const game = ctx.params.game
-    const settings = await ctx.request.body.json()
+    const settings = await ctx.request.body
     await setGameSettings(game, JSON.stringify(settings))
     ctx.response.body = { message: 'Game settings updated' }
   },
@@ -74,7 +74,7 @@ router.post(
   '/game-maker/ai-weekly-reports',
   gameMakerApiKeyMiddleware,
   async (ctx: Context) => {
-    const { email, startOfWeek, weeklyReport } = await ctx.request.body.json()
+    const { email, startOfWeek, weeklyReport } = await ctx.request.body
 
     const performanceReview = await generatePerformanceReview(weeklyReport)
 
