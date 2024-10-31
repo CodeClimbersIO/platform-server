@@ -109,8 +109,7 @@ router.post('/ai-weekly-report', async (ctx: Context) => {
  * Endpoint that retrieves the performance review for a user using their email and start date of the week
  */
 router.get('/ai-weekly-report', async (ctx: Context) => {
-  const email = ctx.request.url.searchParams.get('email')
-  const startOfWeek = ctx.request.url.searchParams.get('startOfWeek')
+  const { email, startOfWeek } = ctx.query
   if (!email || !startOfWeek) {
     ctx.response.status = 400
     ctx.response.body = { error: 'email and startOfWeek are required' }

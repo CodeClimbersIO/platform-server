@@ -7,7 +7,7 @@ export const gameMakerApiKeyMiddleware = async (
   next: () => Promise<unknown>,
 ) => {
   assert(GAME_MAKER_API_KEY, 'GAME_MAKER_API_KEY is not set')
-  const apiKey = ctx.request.headers.get('x-game-maker-api-key')
+  const apiKey = ctx.get('x-game-maker-api-key')
   if (apiKey !== GAME_MAKER_API_KEY) {
     ctx.response.status = 401
     ctx.response.body = { error: 'Unauthorized' }
