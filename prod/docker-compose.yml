@@ -3,13 +3,13 @@ services:
     image: ghcr.io/codeclimbersio/platform-server
     container_name: codeclimbers-platform-server
     ports:
-      - "8000:8000"
+      - '8000:8000'
     depends_on:
       - codeclimbers-redis
     env_file:
       - .env
     restart: always
-    
+
   codeclimbers-redis:
     image: redis:latest
     container_name: codeclimbers-redis

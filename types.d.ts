@@ -21,5 +21,8 @@ declare namespace Codeclimbers {
     totalGrowthHours: number
     totalActiveHours: number
   }
-}
 
+  export interface AiWeeklyReportEmailDto {
+    firstFortyWords: string
+  }
+}

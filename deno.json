@@ -15,11 +15,19 @@
   },
   "imports": {
     "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@^0.30.1",
+    "@denoland/cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "@oak/oak": "jsr:@oak/oak@^17.1.1",
     "axios": "npm:axios@^1.7.7",
+    "dayjs": "npm:dayjs@^1.11.13",
     "express": "npm:express@^5.0.1",
-    "redis": "npm:redis@^4.7.0",
-    "@denoland/cors": "https://deno.land/x/cors@v1.2.2/mod.ts"
+    "redis": "npm:redis@^4.7.0"
+  },
+  "fmt": {
+    "useTabs": false,
+    "indentWidth": 2,
+    "semiColons": false,
+    "singleQuote": true,
+    "lineWidth": 80
   },
   "compilerOptions": {
     "types": ["./types.d.ts"]
