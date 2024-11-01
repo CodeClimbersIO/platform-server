@@ -1,4 +1,4 @@
-import type { Context } from '@oak/oak/context'
+import type { Context } from 'koa'
 
 export async function errorHandler(
   context: Context,
