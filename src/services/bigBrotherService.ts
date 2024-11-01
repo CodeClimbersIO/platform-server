@@ -15,7 +15,35 @@ export async function generatePerformanceReview(
 ): Promise<string> {
   assert(anthropicClient.apiKey, 'ANTHROPIC_API_KEY is not set')
 
-  const prompt = await buildPromptFromWeeklyScores(weeklyReport)
+  // convert actuals to hours
+  const weeklyReportHours: Codeclimbers.WeeklyReportData = {
+    deepWorkTimeScore: {
+      ...weeklyReport.deepWorkTimeScore,
+      actual: Math.round(weeklyReport.deepWorkTimeScore.actual / 60),
+    },
+    totalTimeScore: {
+      ...weeklyReport.totalTimeScore,
+      actual: Math.round(weeklyReport.totalTimeScore.actual / 60),
+    },
+    growthScore: {
+      ...weeklyReport.growthScore,
+      actual: Math.round(weeklyReport.growthScore.actual / 60),
+    },
+    projectTimeScore: {
+      ...weeklyReport.projectTimeScore,
+      actual: Math.round(weeklyReport.projectTimeScore.actual / 60),
+    },
+    socialMediaTimeScore: {
+      ...weeklyReport.socialMediaTimeScore,
+      actual: Math.round(weeklyReport.socialMediaTimeScore.actual / 60),
+    },
+    totalScore: {
+      ...weeklyReport.totalScore,
+      actual: weeklyReport.totalScore.actual,
+    },
+  }
+
+  const prompt = await buildPromptFromWeeklyScores(weeklyReportHours)
 
   const message = await anthropicClient.messages.create({
     max_tokens: 1024,
