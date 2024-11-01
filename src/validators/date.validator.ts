@@ -18,15 +18,6 @@ export const validateStartOfWeek = (
     }
   }
 
-  // Check if date is more than 1 month ago
-  const oneMonthAgo = dayjs().subtract(1, 'month')
-  if (date.isBefore(oneMonthAgo)) {
-    return {
-      status: 400,
-      body: { error: 'startOfWeek cannot be more than 1 month ago' },
-    }
-  }
-
   // Check if date is a Monday (0 = Sunday, 1 = Monday, etc.)
   if (date.day() !== 1) {
     return { status: 400, body: { error: 'startOfWeek must be a Monday' } }

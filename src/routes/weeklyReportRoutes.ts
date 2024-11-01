@@ -7,6 +7,7 @@ import {
   sendWeeklyReportEmail,
 } from '../services/emailService.ts'
 import { validateStartOfWeek } from '../validators/date.validator.ts'
+import dayjs from 'dayjs'
 
 const deprecratedRouter = new Router()
 const router = new Router()
@@ -72,7 +73,15 @@ router.post('/ai-weekly-report', async (ctx: Context) => {
       error: 'email, startOfWeek and weeklyReport is required',
     }
   }
+  const date = dayjs(startOfWeek)
+
   const invalidWeek = validateStartOfWeek(startOfWeek)
+  const oneMonthAgo = dayjs().subtract(1, 'month')
+  if (date.isBefore(oneMonthAgo)) {
+    ctx.response.status = 400
+    ctx.response.body = { error: 'startOfWeek cannot be more than 1 month ago' }
+    return
+  }
   if (invalidWeek) {
     ctx.response.status = invalidWeek.status
     ctx.response.body = invalidWeek.body
