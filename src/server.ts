@@ -13,6 +13,7 @@ import {
   weeklyReportRouter,
 } from './routes/weeklyReportRoutes.ts'
 import { isDevelopment } from './environment.ts'
+import { errorReportRouter } from './routes/errorReportRoutes.ts'
 
 const app = new Koa()
 
@@ -39,6 +40,7 @@ app.use(router.routes())
 app.use(deprecratedWeeklyReportRouter.routes())
 app.use(weeklyReportRouter.prefix('/api').routes())
 app.use(gameMakerRouter.prefix('/api').routes())
+app.use(errorReportRouter.prefix('/api').routes())
 app.use(router.allowedMethods())
 
 app.use(errorHandler)
