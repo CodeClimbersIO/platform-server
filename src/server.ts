@@ -22,11 +22,6 @@ app.use(cors({
   origin: isDevelopment ? '*' : 'https://local.codeclimbers.io',
 }))
 
-app.use(async (ctx: Context, next: () => Promise<unknown>) => {
-  ctx.response.type = 'application/json'
-  await next()
-})
-
 const router = new Router()
 
 router.get('/health', (ctx: Context) => {
@@ -43,6 +38,20 @@ app.use(gameMakerRouter.prefix('/api').routes())
 app.use(errorReportRouter.prefix('/api').routes())
 app.use(router.allowedMethods())
 
+if (isDevelopment) {
+  const routes = [
+    ...router.stack,
+    ...weeklyReportRouter.stack,
+    ...deprecratedWeeklyReportRouter.stack,
+    ...gameMakerRouter.stack,
+    ...errorReportRouter.stack,
+  ].map((layer) => ({
+    path: layer.path,
+    methods: layer.methods,
+  }))
+
+  console.log(routes)
+}
 app.use(errorHandler)
 
 const PORT = Deno.env.get('PORT') || 8000
