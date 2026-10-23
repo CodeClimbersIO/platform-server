@@ -8,7 +8,7 @@ const anthropicClient = new Anthropic({
 
 /**
  * Takes the weekly repot which has a type WeeklyReportData and uses an llm prompt to generate a performance review that mimics a fictional boss.
- * Uses Claude 3.5 Sonnet
+ * Uses Claude Sonnet 5.5
  */
 export async function generatePerformanceReview(
   weeklyReport: Codeclimbers.WeeklyReportData,
@@ -48,7 +48,7 @@ export async function generatePerformanceReview(
   const message = await anthropicClient.messages.create({
     max_tokens: 1024,
     messages: [{ role: 'user', content: prompt }],
-    model: 'claude-3-5-sonnet-20240620',
+    model: 'claude-sonnet-5-5',
   })
 
   const response = message.content[0]
